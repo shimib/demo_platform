@@ -6,7 +6,7 @@ resources:
       sourceArtifactory:    ArtifactoryUnified
       buildName:            npm-example-unified
       buildNumber:          13
-      externalCI:           jenkins
+      externalCI:           demo_test_JenkinsServer
 pipelines:
   - name: execute_jenkins_job
     steps:
@@ -15,6 +15,6 @@ pipelines:
       configuration:
        jenkinsJobName: npm-example-unified
        integrations: 
-        - name: jenkins
+        - name: demo_test_JenkinsServer
        outputResources:   
         - name: jenkins_job_output
