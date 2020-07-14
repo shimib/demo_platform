@@ -14,7 +14,7 @@ pipelines:
       type: Jenkins
       configuration:
        jenkinsJobName: npm-example-unified
-      integrations: 
-       - name: jenkins
-      outputResources:   
-       - name: jenkins_job_output
+       integrations: 
+        - name: jenkins
+       outputResources:   
+        - name: jenkins_job_output
