@@ -4,8 +4,8 @@ resources:
     type: BuildInfo
     configuration:
       sourceArtifactory:    ArtifactoryUnified
-      buildName:            npm-example-unified
-      buildNumber:          13
+      buildName:            step-1-create-gradle-app
+      buildNumber:          999 
       externalCI:           demo_test_JenkinsServer
 pipelines:
   - name: execute_jenkins_job
@@ -13,7 +13,7 @@ pipelines:
     - name: run_jenkins
       type: Jenkins
       configuration:
-       jenkinsJobName: npm-example-unified
+       jenkinsJobName: step-1-create-gradle-app
        integrations: 
         - name: demo_test_JenkinsServer
        outputResources:   
