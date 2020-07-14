@@ -1,0 +1,20 @@
+apiVersion: v1.1
+resources:
+  - name: jenkins_job_output
+    type: BuildInfo
+    configuration:
+      sourceArtifactory:    artifactoryIntegration
+      buildName:            npm-example-unified
+      buildNumber:          13
+      externalCI:           jenkins
+pipelines:
+  - name: execute_jenkins_job
+    steps:
+    - name: run_jenkins
+      type: Jenkins
+      configuration:
+       jenkinsJobName: npm-example-unified
+      integrations: 
+       - name: jenkins
+      outputResources:   
+       - name: jenkins_job_output
