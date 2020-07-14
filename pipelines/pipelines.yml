@@ -4,7 +4,7 @@ resources:
     type: BuildInfo
     configuration:
       sourceArtifactory:    ArtifactoryUnified
-      buildName:            step-2-create-ui-pkg
+      buildName:            npm-example
       buildNumber:          999 
       externalCI:           demo_test_JenkinsServer
 pipelines:
@@ -13,7 +13,7 @@ pipelines:
     - name: run_jenkins
       type: Jenkins
       configuration:
-       jenkinsJobName: step-2-create-ui-pkg
+       jenkinsJobName: npm-example
        integrations: 
         - name: demo_test_JenkinsServer
        outputResources:   
