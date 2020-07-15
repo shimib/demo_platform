@@ -78,5 +78,18 @@ node {
     // Promote Gradle Build
     artServer.promote promotionConfig
   }
-
+  stage ('Report back to JFrog Pipelines')
+  {
+    jfPipelines(
+      outputResources: """[
+       {
+         "name": "gradle_jenkins_fis_results",
+         "content": {
+           "passing": 17,
+           "failing": 0
+         }
+       }
+      ]"""
+   )
+  }
 }
