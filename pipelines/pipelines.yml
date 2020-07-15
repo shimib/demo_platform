@@ -16,6 +16,7 @@ pipelines:
         - name: demo_test_JenkinsServer
        outputResources:   
         - name: jobResults
-      onSuccess:
+      execution:
+       onSuccess:
             - echo "${res_jobResults_passing}"
           
