@@ -14,11 +14,8 @@ pipelines:
        jenkinsJobName: gradle-app-fis
        integrations: 
         - name: demo_test_JenkinsServer
-       # outputResources:   
-       #        - name: jobResults
-
-  - name: report_it
-    steps:
+       outputResources:   
+        - name: gradle_jenkins_fis_results
     - name: echo_it
       type: Bash
       configuration:
