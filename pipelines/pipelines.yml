@@ -24,6 +24,6 @@ pipelines:
               - name: run_jenkins
       execution:
         onSuccess:
-                - echo "passing: ${res_jobResults_passing}"
+                - "echo passing: ${res_jobResults_passing}"
 
           
