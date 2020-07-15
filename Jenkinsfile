@@ -66,9 +66,9 @@ node {
         'buildNumber'        : buildInfo.number,
 
         //Optional parameters
-        'targetRepo'         : 'gradle-release-local',
+        'targetRepo'         : 'gradle-release-local-decl',
         'comment'            : 'Promoting Gradle Build',
-        'sourceRepo'         : 'gradle-dev-local',
+        'sourceRepo'         : 'gradle-dev-local-decl',
         'status'             : 'Released',
         'includeDependencies': false,
         'failFast'           : true,
