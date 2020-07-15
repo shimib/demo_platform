@@ -3,7 +3,6 @@ resources:
   - name: jobResults
     type: PropertyBag
     configuration:
-     content:
       passing: 0
       failing: 0
 pipelines:
