@@ -1,10 +1,19 @@
 apiVersion: v1.1
+resources:
+  - name: jobResults
+    type: PropertyBag
+    configuration:
+      passing: 0
+      failing: 0
 pipelines:
   - name: execute_jenkins_job
     steps:
     - name: run_jenkins
       type: Jenkins
       configuration:
-       jenkinsJobName: npm-example
+       jenkinsJobName: gradle-app-fis
        integrations: 
         - name: demo_test_JenkinsServer
+       outputResources:   
+        - name: jobResults
+          
