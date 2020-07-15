@@ -8,7 +8,7 @@ resources:
 pipelines:
   - name: execute_jenkins_job
     steps:
-    - name: run_jenkins
+    - name: Jenkins_Gradle_LoadCalculator
       type: Jenkins
       configuration:
        jenkinsJobName: gradle-app-fis
@@ -16,7 +16,7 @@ pipelines:
         - name: demo_test_JenkinsServer
        outputResources:   
         - name: gradle_jenkins_fis_results
-    - name: echo_it
+    - name: Validation
       type: Bash
       configuration:
               inputResources:
