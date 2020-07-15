@@ -19,6 +19,9 @@ pipelines:
         - name: jobResults
     - name: echo_results
       type: Bash
+      configuration:
+              inputSteps:
+              - name: run_jenkins
       execution:
         onSuccess:
                 - echo "${res_jobResults_content}"
