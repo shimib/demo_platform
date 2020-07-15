@@ -3,6 +3,7 @@ resources:
   - name: jobResults
     type: PropertyBag
     configuration:
+     content:
       passing: 0
       failing: 0
 pipelines:
@@ -16,7 +17,4 @@ pipelines:
         - name: demo_test_JenkinsServer
        outputResources:   
         - name: jobResults
-      execution:
-       onSuccess:
-            - echo "${res_jobResults_passing}"
           
