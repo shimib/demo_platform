@@ -22,6 +22,8 @@ pipelines:
       configuration:
               inputSteps:
               - name: run_jenkins
+              inputResources:
+              - name: jobResults
       execution:
         onSuccess:
                 - "echo passing: ${res_jobResults_passing}"
