@@ -23,6 +23,6 @@ pipelines:
               - name: gradle_jenkins_fis_results
       execution:
         onSuccess:
-                - "echo passing: ${res_jobResults_passing}"
+                - "echo passing: ${res_gradle_jenkins_fis_results_passing}"
 
           
