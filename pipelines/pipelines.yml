@@ -1,12 +1,4 @@
 apiVersion: v1.1
-resources:
-  - name: jenkins_job_output
-    type: BuildInfo
-    configuration:
-      sourceArtifactory:    ArtifactoryUnified
-      buildName:            npm-example
-      buildNumber:          999 
-      externalCI:           demo_test_JenkinsServer
 pipelines:
   - name: execute_jenkins_job
     steps:
@@ -16,5 +8,3 @@ pipelines:
        jenkinsJobName: npm-example
        integrations: 
         - name: demo_test_JenkinsServer
-       outputResources:   
-        - name: jenkins_job_output
