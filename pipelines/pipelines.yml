@@ -14,8 +14,8 @@ pipelines:
        jenkinsJobName: gradle-app-fis
        integrations: 
         - name: demo_test_JenkinsServer
-       outputResources:   
-        - name: jobResults
+       # outputResources:   
+       #        - name: jobResults
 
   - name: report_it
     steps:
