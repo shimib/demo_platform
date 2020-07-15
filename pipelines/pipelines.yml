@@ -17,4 +17,10 @@ pipelines:
         - name: demo_test_JenkinsServer
        outputResources:   
         - name: jobResults
+    - name: echo_results
+      type: Bash
+      execution:
+        onSuccess:
+                - echo "${res_jobResults_content}"
+
           
