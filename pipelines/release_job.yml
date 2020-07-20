@@ -17,8 +17,8 @@ resources:
     configuration:
       sourceArtifactory:    ArtifactoryUnified
       buildName:            grade-app-fis 
-      buildNumber:          20
-      #externalCI:           demo_test_JenkinsServer
+      buildNumber:          1 
+      externalCI:           demo_test_JenkinsServer
   - name: distribution_rules_fis
     type: DistributionRule
     configuration:
