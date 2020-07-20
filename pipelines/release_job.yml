@@ -22,7 +22,7 @@ resources:
       countryCodes:
         - '*'
 pipelines:      
-- name: FIS_demo_release_mgmt
+- name: FIS_release_mgmt
 #  configuration:
         #          nodePool: Ubuntu
   steps:
