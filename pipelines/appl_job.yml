@@ -1,0 +1,124 @@
+resources:
+  - name: appl_build_info_fis
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build_fis
+      buildNumber: 1
+  - name: appl_promoted_build_info_fis
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build_fis
+      buildNumber: 1
+  - name: soleng_gitRepo_fis
+    type: GitRepo
+    configuration:
+      path: jfrog/SolEngDemo
+      gitProvider: Github_SolEng
+      buildOn:
+        commit: false
+pipelines:
+ - name: FIS_demo_application
+   steps:
+   - name: bld_backend
+     type: MvnBuild
+     configuration:
+      sourceLocation: Pipelines/go-java-docker-pipeline/java-backend-service
+      mvnCommand: clean install -ntp
+      configFileLocation: .
+      configFileName: mvn-art-config
+      inputResources:
+        - name: soleng_gitRepo_fis
+      integrations:
+        - name: ArtifactoryUnified
+      runtime:
+        type: image
+        image:
+          auto:
+            language: java
+            versions:
+              - '11'
+     execution:
+      onStart:
+        - javac -version
+        - mvn --version
+        - >-
+          sed -ie 's/Default-Server/ArtifactoryUnified/g'
+          $res_soleng_gitRepo_resourcePath/Pipelines/go-java-docker-pipeline/java-backend-service/mvn-art-config
+   - name: bld_frontend
+     type: NpmBuild
+     configuration:
+      npmArgs: '--no-progress --no-audit'
+      sourceLocation: Pipelines/go-java-docker-pipeline/npm-frontend-service
+      repositoryName: npm
+      inputResources:
+        - name: soleng_gitRepo_fis
+      integrations:
+        - name: ArtifactoryUnified
+   - name: publish_frontend
+     type: NpmPublish
+     configuration:
+      repositoryName: npm-dev-local
+      inputSteps:
+        - name: bld_frontend_fis
+      integrations:
+        - name: ArtifactoryUnified
+    execution:
+      onStart:
+        - export inputNpmBuildStepName="bld_frontend"
+   - name: build_DockerApp
+     type: Bash
+     configuration:
+      environmentVariables:
+        dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo
+        dockerImageTag: '${run_number}'
+      inputResources:
+        - name: soleng_gitRepo_fis
+          trigger: false
+      inputSteps:
+        - name: bld_backend_fis
+        - name: publish_frontend_fis
+      integrations:
+        - name: ArtifactoryUnified
+    execution:
+      onStart:
+        - rm -rf $run_dir/workspace/jfrog
+        - >-
+          retry_command jfrog rt config --url $int_ArtifactoryUnified_url --user
+          $int_ArtifactoryUnified_user --apikey $int_ArtifactoryUnified_apikey
+          --interactive=false
+        - >-
+          pushd
+          $res_soleng_gitRepo_resourcePath/Pipelines/go-java-docker-pipeline
+        - 'add_run_variables buildStepName=${step_name}'
+        - 'add_run_variables ${step_name}_buildNumber=${run_number}'
+        - 'add_run_variables ${step_name}_buildName=${pipeline_name}'
+        - >-
+          docker build --pull --no-cache -t $dockerImageName:$dockerImageTag
+          --build-arg REGISTRY=${int_ArtifactoryUnified_url} .
+        - jfrog rt bce $pipeline_name $run_number
+        - >-
+          jfrog rt docker-push
+          docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo:$run_number
+          docker-dev-local --build-name=$pipeline_name
+          --build-number=$run_number
+        - add_run_files /tmp/jfrog/. jfrog
+   - name: publish_app_build
+     type: PublishBuildInfo
+     configuration:
+      forceXrayScan: false
+      inputSteps:
+        - name: build_DockerApp
+      outputResources:
+        - name: appl_build_info_fis
+   - name: promoteDockerApp
+     type: PromoteBuild
+     configuration:
+      targetRepository: docker-prod-local
+      integrations:
+        - name: ArtifactoryUnified
+      inputResources:
+        - name: appl_build_info_fis
+      outputResources:
+        - name: appl_promoted_build_info_fis         
