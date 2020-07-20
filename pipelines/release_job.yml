@@ -34,7 +34,7 @@ resources:
       buildName: backend_build
       buildNumber: 1
 pipelines:      
- name: demo_release_mgmt_fis
+ name: FIS_demo_release_mgmt
  steps:
   - name: bundle
     type: CreateReleaseBundle

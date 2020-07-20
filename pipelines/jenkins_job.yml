@@ -6,7 +6,7 @@ resources:
       passing: 0
       failing: 0
 pipelines:
-  - name: execute_jenkins_job
+  - name: FIS_execute_jenkins_job
     steps:
     - name: Jenkins_Gradle_LoadCalculator
       type: Jenkins
