@@ -61,7 +61,7 @@ pipelines:
      configuration:
       repositoryName: npm-dev-local
       inputSteps:
-        - name: bld_frontend_fis
+        - name: bld_frontend
       integrations:
         - name: ArtifactoryUnified
      execution:
@@ -77,8 +77,8 @@ pipelines:
         - name: soleng_gitRepo_fis
           trigger: false
       inputSteps:
-        - name: bld_backend_fis
-        - name: publish_frontend_fis
+        - name: bld_backend
+        - name: publish_frontend
       integrations:
         - name: ArtifactoryUnified
      execution:
