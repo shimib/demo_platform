@@ -44,8 +44,8 @@ pipelines:
           trigger: false
         - name: appl_promoted_build_info_fis
           trigger: false
-        - name: jenkins_job_build_info
-          trigger: false
+          #        - name: jenkins_job_build_info
+          # trigger: false
       outputResources:
         - name: release_bundle_fis
       releaseNotes:
