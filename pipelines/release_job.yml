@@ -31,7 +31,7 @@ resources:
     type: BuildInfo
     configuration:
       sourceArtifactory: ArtifactoryUnified
-      buildName: backend_build
+      buildName: backend_build_fis
       buildNumber: 1
 pipelines:      
 - name: FIS_demo_release_mgmt
