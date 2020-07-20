@@ -12,6 +12,13 @@ resources:
       sourceDistribution: Distribution
       name: demo_rb_fis
       version: v1.0.0
+  - name: jenkins_job_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory:    artifactoryUnified
+      buildName:            grade_app_fis 
+      buildNumber:          1
+      externalCI:           demo_test_JenkinsServer
   - name: distribution_rules_fis
     type: DistributionRule
     configuration:
@@ -36,6 +43,8 @@ pipelines:
         - name: gosvc_promoted_build_info
           trigger: false
         - name: appl_promoted_build_info_fis
+          trigger: false
+        - name: jenkins_job_build_info
           trigger: false
       outputResources:
         - name: release_bundle_fis
