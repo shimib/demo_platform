@@ -1,0 +1,73 @@
+apiVersion: v1.1
+resources:
+  - name: release_bundle_fis
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: Distribution
+      name: demo_rb_fis
+      version: v1.0.0
+  - name: signed_bundle_fis
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: Distribution
+      name: demo_rb_fis
+      version: v1.0.0
+  - name: distribution_rules_fis
+    type: DistributionRule
+    configuration:
+      sourceDistribution: Distribution
+      serviceName: Edge*
+      siteName: Edge*
+      cityName: '*'
+      countryCodes:
+        - '*'
+  - name: gosvc_promoted_build_info_fis
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: svc_build
+      buildNumber: 1
+  - name: appl_promoted_build_info_fis
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build
+      buildNumber: 1
+pipelines:      
+ name: demo_release_mgmt_fis
+ steps:
+  - name: bundle
+    type: CreateReleaseBundle
+    configuration:
+      releaseBundleName: demo_rb_fis
+      releaseBundleVersion: 'v1.0.${run_number}'
+      dryRun: false
+      sign: false
+      description: some random test description
+      inputResources:
+        - name: gosvc_promoted_build_info_fis
+          trigger: false
+        - name: appl_promoted_build_info_fis
+          trigger: false
+      outputResources:
+        - name: release_bundle_fis
+      releaseNotes:
+        syntax: markdown
+        content: |
+          ## Heading
+            * Bullet
+            * Points
+  - name: sign
+    type: SignReleaseBundle
+    configuration:
+      inputResources:
+        - name: release_bundle_fis
+      outputResources:
+        - name: signed_bundle_fis
+  - name: distribute
+    type: DistributeReleaseBundle
+    configuration:
+      dryRun: false
+      inputResources:
+        - name: signed_bundle_fis
+        - name: distribution_rules_fis

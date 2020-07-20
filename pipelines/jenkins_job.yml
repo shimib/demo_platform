@@ -1,0 +1,28 @@
+apiVersion: v1.1
+resources:
+  - name: gradle_jenkins_fis_results
+    type: PropertyBag
+    configuration:
+      passing: 0
+      failing: 0
+pipelines:
+  - name: execute_jenkins_job
+    steps:
+    - name: Jenkins_Gradle_LoadCalculator
+      type: Jenkins
+      configuration:
+       jenkinsJobName: gradle-app-fis
+       integrations: 
+        - name: demo_test_JenkinsServer
+       outputResources:   
+        - name: gradle_jenkins_fis_results
+    - name: Validation
+      type: Bash
+      configuration:
+              inputResources:
+              - name: gradle_jenkins_fis_results
+      execution:
+        onSuccess:
+                - "echo passing: ${res_gradle_jenkins_fis_results_passing}"
+
+          
