@@ -21,12 +21,6 @@ resources:
       cityName: '*'
       countryCodes:
         - '*'
-  - name: gosvc_promoted_build_info_fis
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: ArtifactoryUnified
-      buildName: svc_build
-      buildNumber: 1
 pipelines:      
 - name: FIS_demo_release_mgmt
   steps:
@@ -39,7 +33,7 @@ pipelines:
       sign: false
       description: some random test description
       inputResources:
-        - name: gosvc_promoted_build_info_fis
+        - name: gosvc_promoted_build_info
           trigger: false
         - name: appl_promoted_build_info_fis
           trigger: false
