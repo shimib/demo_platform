@@ -15,9 +15,9 @@ resources:
   - name: jenkins_job_build_info
     type: BuildInfo
     configuration:
-      sourceArtifactory:    ArtifactoryUnified
-      buildName:            gradle-app-fis 
-      buildNumber:          1 
+      sourceArtifactory: ArtifactoryUnified
+      buildName: gradle-app-fis 
+      buildNumber: 24 
       #      externalCI:           demo_test_JenkinsServer
   - name: distribution_rules_fis
     type: DistributionRule
