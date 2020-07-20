@@ -8,7 +8,7 @@ resources:
 pipelines:
   - name: FIS_execute_jenkins_job
     steps:
-    - name: Jenkins_Gradle_LoadCalculator
+    - name: Jenkins_LoanCalculator
       type: Jenkins
       configuration:
        jenkinsJobName: gradle-app-fis
@@ -22,6 +22,7 @@ pipelines:
       configuration:
               inputResources:
               - name: gradle_jenkins_fis_results
+              - name: jenkins_job_build_info
       execution:
         onSuccess:
                 - "echo passing: ${res_gradle_jenkins_fis_results_passing}"
