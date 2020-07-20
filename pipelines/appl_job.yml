@@ -64,7 +64,7 @@ pipelines:
         - name: bld_frontend_fis
       integrations:
         - name: ArtifactoryUnified
-    execution:
+     execution:
       onStart:
         - export inputNpmBuildStepName="bld_frontend"
    - name: build_DockerApp
@@ -81,7 +81,7 @@ pipelines:
         - name: publish_frontend_fis
       integrations:
         - name: ArtifactoryUnified
-    execution:
+     execution:
       onStart:
         - rm -rf $run_dir/workspace/jfrog
         - >-
