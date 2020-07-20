@@ -6,9 +6,9 @@ resources:
       passing: 0
       failing: 0
 pipelines:
-  - name: FIS_execute_jenkins_job
+  - name: FIS_gosvc_Jenkins
     steps:
-    - name: Jenkins_LoanCalculator
+    - name: gosvc_build
       type: Jenkins
       configuration:
        jenkinsJobName: gradle-app-fis
@@ -16,7 +16,7 @@ pipelines:
         - name: demo_test_JenkinsServer
        outputResources:   
         - name: gradle_jenkins_fis_results
-    - name: Validation
+    - name: Validate_Tests
       type: Bash
       configuration:
               inputResources:
