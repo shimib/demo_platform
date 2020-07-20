@@ -27,12 +27,6 @@ resources:
       sourceArtifactory: ArtifactoryUnified
       buildName: svc_build
       buildNumber: 1
-  - name: appl_promoted_build_info_fis
-    type: BuildInfo
-    configuration:
-      sourceArtifactory: ArtifactoryUnified
-      buildName: backend_build_fis
-      buildNumber: 1
 pipelines:      
 - name: FIS_demo_release_mgmt
   steps:
