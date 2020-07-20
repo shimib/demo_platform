@@ -16,7 +16,7 @@ resources:
     type: BuildInfo
     configuration:
       sourceArtifactory:    ArtifactoryUnified
-      buildName:            grade_app_fis 
+      buildName:            grade-app-fis 
       buildNumber:          1
       externalCI:           demo_test_JenkinsServer
   - name: distribution_rules_fis
