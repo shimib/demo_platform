@@ -30,6 +30,8 @@ resources:
         - '*'
 pipelines:      
 - name: FIS_demo_release_mgmt
+  configuration:
+          nodePool: Ubuntu
   steps:
   - name: bundle
     type: CreateReleaseBundle
