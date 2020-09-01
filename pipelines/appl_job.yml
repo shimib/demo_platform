@@ -102,7 +102,7 @@ pipelines:
         - >-
           jfrog rt docker-push
           docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo:$run_number
-          docker-dev-local --build-name=$pipeline_name
+          docker --build-name=$pipeline_name
           --build-number=$run_number
         - add_run_files /tmp/jfrog/. jfrog
    - name: publish_app_build
