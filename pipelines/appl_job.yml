@@ -15,7 +15,7 @@ resources:
     type: GitRepo
     configuration:
       path: jfrog/SolEngDemo
-      gitProvider: shimiz
+      gitProvider: siva_github
       buildOn:
         commit: false
 pipelines:
