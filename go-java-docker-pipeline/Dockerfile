@@ -1,7 +1,7 @@
 #Download image from artifactory
 ARG REGISTRY=docker.artifactory-unified.soleng-us.jfrog.team
 #FROM openjdk:11-jdk
-FROM $REGISTRY/openjdk:12-jdk
+FROM $REGISTRY/openjdk:11.0.7-jdk
 
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y nodejs \
