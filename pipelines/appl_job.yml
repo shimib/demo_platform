@@ -45,7 +45,7 @@ pipelines:
         - mvn --version
         - >-
           sed -ie 's/Default-Server/ArtifactoryUnified/g'
-          $res_soleng_gitRepo_resourcePath/go-java-docker-pipeline/java-backend-service/mvn-art-config
+          $res_soleng_gitRepo_acme_resourcePath/go-java-docker-pipeline/java-backend-service/mvn-art-config
    - name: bld_frontend
      type: NpmBuild
      configuration:
