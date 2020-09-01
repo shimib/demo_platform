@@ -83,7 +83,7 @@ node {
     jfPipelines(
       outputResources: """[
        {
-         "name": "gradle_jenkins_fis_results",
+         "name": "gradle_jenkins_acme_results",
          "content": {
            "passing": 17,
            "failing": 0

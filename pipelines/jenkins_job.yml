@@ -1,30 +1,30 @@
 apiVersion: v1.1
 resources:
-  - name: gradle_jenkins_fis_results
+  - name: gradle_jenkins_acme_results
     type: PropertyBag
     configuration:
       passing: 0
       failing: 0
 pipelines:
-  - name: FIS_gosvc_Jenkins
+  - name: ACME_gosvc_Jenkins
     steps:
     - name: gosvc_build
       type: Jenkins
       configuration:
-       jenkinsJobName: gradle-app-fis
+       jenkinsJobName: gradle-app-acme
        integrations: 
         - name: demo_test_JenkinsServer
        outputResources:   
-        - name: gradle_jenkins_fis_results
+        - name: gradle_jenkins_acme_results
     - name: Validate_Tests
       type: Bash
       configuration:
               inputResources:
-              - name: gradle_jenkins_fis_results
+              - name: gradle_jenkins_acme_results
               outputResources:
               - name: gosvc_build_info        
       execution:
         onSuccess:
-                - "echo passing: ${res_gradle_jenkins_fis_results_passing}"
+                - "echo passing: ${res_gradle_jenkins_acme_results_passing}"
 
           

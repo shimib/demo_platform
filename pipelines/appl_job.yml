@@ -1,17 +1,17 @@
 resources:
-  - name: appl_build_info_fis
+  - name: appl_build_info_acme
     type: BuildInfo
     configuration:
       sourceArtifactory: ArtifactoryUnified
-      buildName: backend_build_fis
+      buildName: backend_build_acme
       buildNumber: 1
-  - name: appl_promoted_build_info_fis
+  - name: appl_promoted_build_info_acme
     type: BuildInfo
     configuration:
       sourceArtifactory: ArtifactoryUnified
-      buildName: backend_build_fis
+      buildName: backend_build_acme
       buildNumber: 1
-  - name: soleng_gitRepo_fis
+  - name: soleng_gitRepo_acme
     type: GitRepo
     configuration:
       path: jfrog/SolEngDemo
@@ -19,7 +19,7 @@ resources:
       buildOn:
         commit: false
 pipelines:
- - name: FIS_demo_application
+ - name: ACME_demo_application
    steps:
    - name: bld_backend
      type: MvnBuild
@@ -29,7 +29,7 @@ pipelines:
       configFileLocation: .
       configFileName: mvn-art-config
       inputResources:
-        - name: soleng_gitRepo_fis
+        - name: soleng_gitRepo_acme
       integrations:
         - name: ArtifactoryUnified
       runtime:
@@ -53,7 +53,7 @@ pipelines:
       sourceLocation: Pipelines/go-java-docker-pipeline/npm-frontend-service
       repositoryName: npm
       inputResources:
-        - name: soleng_gitRepo_fis
+        - name: soleng_gitRepo_acme
       integrations:
         - name: ArtifactoryUnified
    - name: publish_frontend
@@ -74,7 +74,7 @@ pipelines:
         dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo
         dockerImageTag: '${run_number}'
       inputResources:
-        - name: soleng_gitRepo_fis
+        - name: soleng_gitRepo_acme
           trigger: false
       inputSteps:
         - name: bld_backend
@@ -90,7 +90,7 @@ pipelines:
           --interactive=false
         - >-
           pushd
-          $res_soleng_gitRepo_fis_resourcePath/Pipelines/go-java-docker-pipeline
+          $res_soleng_gitRepo_acme_resourcePath/Pipelines/go-java-docker-pipeline
         - 'add_run_variables buildStepName=${step_name}'
         - 'add_run_variables ${step_name}_buildNumber=${run_number}'
         - 'add_run_variables ${step_name}_buildName=${pipeline_name}'
@@ -111,7 +111,7 @@ pipelines:
       inputSteps:
         - name: build_DockerApp
       outputResources:
-        - name: appl_build_info_fis
+        - name: appl_build_info_acme
    - name: promoteDockerApp
      type: PromoteBuild
      configuration:
@@ -119,6 +119,6 @@ pipelines:
       integrations:
         - name: ArtifactoryUnified
       inputResources:
-        - name: appl_build_info_fis
+        - name: appl_build_info_acme
       outputResources:
-        - name: appl_promoted_build_info_fis         
+        - name: appl_promoted_build_info_acme         
