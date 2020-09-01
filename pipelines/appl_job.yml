@@ -73,7 +73,7 @@ pipelines:
      type: Bash
      configuration:
       environmentVariables:
-        dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo
+        dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_acme
         dockerImageTag: '${run_number}'
       inputResources:
         - name: soleng_gitRepo_acme
@@ -101,7 +101,7 @@ pipelines:
         - jfrog rt bce $pipeline_name $run_number
         - >-
           jfrog rt docker-push
-          docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo:$run_number
+          docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_acme:$run_number
           docker --build-name=$pipeline_name
           --build-number=$run_number
         - add_run_files /tmp/jfrog/. jfrog
