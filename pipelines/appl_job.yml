@@ -96,7 +96,6 @@ pipelines:
         - 'add_run_variables ${step_name}_buildName=${pipeline_name}'
         - >-
           docker build --pull --no-cache -t $dockerImageName:$dockerImageTag
-          --build-arg REGISTRY=${int_ArtifactoryUnified_url} .
         - jfrog rt bce $pipeline_name $run_number
         - >-
           jfrog rt docker-push
