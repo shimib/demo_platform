@@ -14,7 +14,7 @@ resources:
   - name: soleng_gitRepo_acme
     type: GitRepo
     configuration:
-      path: shimib/demo-platform
+      path: shimib/demo_platform
       gitProvider: shimiz
       buildOn:
         commit: false
