@@ -14,7 +14,7 @@ resources:
   - name: soleng_gitRepo_acme
     type: GitRepo
     configuration:
-      path: jfrog/SolEngDemo
+      path: shimib/demo-platform
       gitProvider: shimiz
       buildOn:
         commit: false
