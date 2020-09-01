@@ -1,0 +1,285 @@
+resources:
+  - name: soleng_gitRepo
+    type: GitRepo
+    configuration:
+      path: jfrog/SolEngDemo
+      gitProvider: Github_SolEng
+      buildOn:
+        commit: false
+  - name: gosvc_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: svc_build
+      buildNumber: 1
+
+  - name: gosvc_promoted_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: svc_build
+      buildNumber: 1
+
+  - name: appl_build_info_output
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build
+      buildNumber: 1
+
+  - name: dockerBuildInfo
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build
+      buildNumber: 1
+
+  - name: appl_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build
+      buildNumber: 1
+
+  - name: appl_promoted_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: backend_build
+      buildNumber: 1
+
+  - name: release_bundle
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: Distribution
+      name: demo_rb
+      version: v1.0.0
+
+  - name: signed_bundle
+    type: ReleaseBundle
+    configuration:
+      sourceDistribution: Distribution
+      name: demo_rb
+      version: v1.0.0
+
+  - name: distribution_rules
+    type: DistributionRule
+    configuration:
+      sourceDistribution: Distribution
+      serviceName: "Edge*"
+      siteName: "Edge*"
+      cityName: "*"
+      countryCodes:
+        - "*"
+
+  # - name: deploy_vm
+  #   type: VmCluster
+  #   configuration:
+  #     sshKey: deploySsh
+  #     targets:
+  #       - 167.71.157.57
+
+pipelines:
+  - name: demo_gosvc
+    steps:
+      - name: bld_svc
+        type: DockerBuild
+        configuration:
+          dockerFileLocation: Pipelines/go-java-docker-pipeline/go-service
+          dockerFileName: Dockerfile
+          dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/gosvc
+          dockerImageTag: ${run_number}
+          inputResources:
+            - name: soleng_gitRepo
+          integrations:
+            - name: ArtifactoryUnified
+
+      - name: push_svc
+        type: DockerPush
+        configuration:
+          targetRepository: docker-dev-local
+          forceXrayScan: true
+          autoPublishBuildInfo: true
+          integrations:
+            - name: ArtifactoryUnified
+          inputSteps:
+            - name: bld_svc
+          outputResources:
+            - name: gosvc_build_info
+            
+      - name: promote_svc_build
+        type: PromoteBuild
+        configuration:
+          targetRepository: docker-prod-local
+          integrations:
+            - name: ArtifactoryUnified
+          inputResources:
+            - name: gosvc_build_info
+          outputResources:
+            - name: gosvc_promoted_build_info
+
+  - name: demo_application
+    steps:
+      - name: bld_backend
+        type: MvnBuild
+        configuration:
+          sourceLocation: Pipelines/go-java-docker-pipeline/java-backend-service
+          mvnCommand: clean install -ntp
+          configFileLocation: .
+          configFileName: mvn-art-config
+          inputResources:
+            - name: soleng_gitRepo
+          integrations:
+            - name: ArtifactoryUnified
+          runtime:
+            type: image
+            image:
+              auto:
+                language: java
+                versions:
+                  - "11"
+        execution:
+          onStart:
+            - javac -version
+            - mvn --version
+            - sed -ie 's/Default-Server/ArtifactoryUnified/g' $res_soleng_gitRepo_resourcePath/Pipelines/go-java-docker-pipeline/java-backend-service/mvn-art-config
+
+      - name: bld_frontend
+        type: NpmBuild
+        configuration:
+          npmArgs: --no-progress --no-audit
+          sourceLocation: Pipelines/go-java-docker-pipeline/npm-frontend-service
+          repositoryName: npm
+          inputResources:
+            - name: soleng_gitRepo
+          integrations:
+            - name: ArtifactoryUnified
+
+      - name: publish_frontend
+        type: NpmPublish
+        configuration:
+          repositoryName: npm-dev-local
+          inputSteps:
+            - name: bld_frontend
+          integrations:
+            - name: ArtifactoryUnified
+        execution:
+          onStart:
+            - export inputNpmBuildStepName="bld_frontend"
+
+      - name: build_DockerApp
+        type: Bash
+        configuration:
+          environmentVariables:
+            dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo
+            dockerImageTag: '${run_number}'
+          inputResources:
+            - name: soleng_gitRepo
+              trigger: false
+          inputSteps:
+            - name: bld_backend
+            - name: publish_frontend
+          integrations:
+            - name: ArtifactoryUnified
+        execution:
+          onStart:
+            - rm -rf $run_dir/workspace/jfrog
+            - retry_command jfrog rt config --url $int_ArtifactoryUnified_url --user $int_ArtifactoryUnified_user --apikey $int_ArtifactoryUnified_apikey --interactive=false
+            - pushd $res_soleng_gitRepo_resourcePath/Pipelines/go-java-docker-pipeline
+            - add_run_variables buildStepName=${step_name}
+            - add_run_variables ${step_name}_buildNumber=${run_number}
+            - add_run_variables ${step_name}_buildName=${pipeline_name}
+            - docker build --pull --no-cache -t $dockerImageName:$dockerImageTag --build-arg REGISTRY=${int_ArtifactoryUnified_url} .
+            - jfrog rt bce $pipeline_name $run_number
+            - jfrog rt docker-push docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo:$run_number docker-dev-local --build-name=$pipeline_name --build-number=$run_number
+            - add_run_files /tmp/jfrog/. jfrog
+
+
+#      - name: buildDockerApp
+#        type: DockerBuild
+#        configuration:
+#          dockerFileLocation: Pipelines/go-java-docker-pipeline
+#          dockerFileName: Dockerfile
+#          dockerImageName: docker.artifactory-unified.soleng-us.jfrog.team/pipeline_app_demo
+#          dockerImageTag: '${run_number}'
+#          integrations:
+#            - name: ArtifactoryUnified
+#          inputResources:
+#            - name: soleng_gitRepo
+#          inputSteps:
+#            - name: bld_backend
+#            - name: publish_frontend
+
+ #     - name: pushDockerApp
+ #       type: DockerPush
+ #       configuration:
+ #         targetRepository: docker-dev-local
+ #         forceXrayScan: false
+ #         autoPublishBuildInfo: true
+ #         integrations:
+ #           - name: ArtifactoryUnified
+ #         inputSteps:
+ #           - name: buildDockerApp
+ #         outputResources:
+ #           - name: dockerBuildInfo
+
+      - name: publish_app_build
+        type: PublishBuildInfo
+        configuration:
+          forceXrayScan: false
+          inputSteps:
+            #- name: pushDockerApp
+            - name: build_DockerApp
+          outputResources:
+            - name: appl_build_info
+
+      - name: promoteDockerApp
+        type: PromoteBuild
+        configuration:
+          targetRepository: docker-prod-local
+          integrations:
+            - name: ArtifactoryUnified
+          inputResources:
+            - name: appl_build_info
+          outputResources:
+            - name: appl_promoted_build_info
+
+  - name: demo_release_mgmt
+    steps:
+      - name: bundle
+        type: CreateReleaseBundle
+        configuration:
+          releaseBundleName: demo_rb
+          releaseBundleVersion: v1.0.${run_number}
+          dryRun: false
+          sign: false
+          description: "some random test description"
+          inputResources:
+            - name: gosvc_promoted_build_info
+              trigger: false
+            - name: appl_promoted_build_info
+              trigger: false
+          outputResources:
+            - name: release_bundle
+          releaseNotes:
+            syntax: markdown
+            content: |
+              ## Heading
+                * Bullet
+                * Points
+
+      - name: sign
+        type: SignReleaseBundle
+        configuration:
+          inputResources:
+            - name: release_bundle
+          outputResources:
+            - name: signed_bundle
+
+      - name: distribute
+        type: DistributeReleaseBundle
+        configuration:
+          dryRun: false
+          inputResources:
+            - name: signed_bundle
+            - name: distribution_rules

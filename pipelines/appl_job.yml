@@ -15,7 +15,7 @@ resources:
     type: GitRepo
     configuration:
       path: jfrog/SolEngDemo
-      gitProvider: siva_github
+      gitProvider: shimiz
       buildOn:
         commit: false
 pipelines:
@@ -24,7 +24,7 @@ pipelines:
    - name: bld_backend
      type: MvnBuild
      configuration:
-      sourceLocation: Pipelines/go-java-docker-pipeline/java-backend-service
+      sourceLocation: go-java-docker-pipeline/java-backend-service
       mvnCommand: clean install -ntp
       configFileLocation: .
       configFileName: mvn-art-config
@@ -45,12 +45,12 @@ pipelines:
         - mvn --version
         - >-
           sed -ie 's/Default-Server/ArtifactoryUnified/g'
-          $res_soleng_gitRepo_resourcePath/Pipelines/go-java-docker-pipeline/java-backend-service/mvn-art-config
+          $res_soleng_gitRepo_resourcePath/go-java-docker-pipeline/java-backend-service/mvn-art-config
    - name: bld_frontend
      type: NpmBuild
      configuration:
       npmArgs: '--no-progress --no-audit'
-      sourceLocation: Pipelines/go-java-docker-pipeline/npm-frontend-service
+      sourceLocation: go-java-docker-pipeline/npm-frontend-service
       repositoryName: npm
       inputResources:
         - name: soleng_gitRepo_acme
@@ -90,7 +90,7 @@ pipelines:
           --interactive=false
         - >-
           pushd
-          $res_soleng_gitRepo_acme_resourcePath/Pipelines/go-java-docker-pipeline
+          $res_soleng_gitRepo_acme_resourcePath/go-java-docker-pipeline
         - 'add_run_variables buildStepName=${step_name}'
         - 'add_run_variables ${step_name}_buildNumber=${run_number}'
         - 'add_run_variables ${step_name}_buildName=${pipeline_name}'
