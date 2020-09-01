@@ -17,7 +17,7 @@ resources:
       path: shimib/demo_platform
       gitProvider: shimiz
       buildOn:
-        commit: false
+        commit: true
 pipelines:
  - name: ACME_demo_application
    steps:
