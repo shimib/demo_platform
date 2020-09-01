@@ -30,6 +30,7 @@ pipelines:
       configFileName: mvn-art-config
       inputResources:
         - name: soleng_gitRepo_acme
+          trigger: false
       integrations:
         - name: ArtifactoryUnified
       runtime:
@@ -54,6 +55,7 @@ pipelines:
       repositoryName: npm
       inputResources:
         - name: soleng_gitRepo_acme
+          trigger: false
       integrations:
         - name: ArtifactoryUnified
    - name: publish_frontend
@@ -95,7 +97,7 @@ pipelines:
         - 'add_run_variables ${step_name}_buildNumber=${run_number}'
         - 'add_run_variables ${step_name}_buildName=${pipeline_name}'
         - >-
-          docker build --pull --no-cache -t $dockerImageName:$dockerImageTag
+          docker build --pull --no-cache -t $dockerImageName:$dockerImageTag .
         - jfrog rt bce $pipeline_name $run_number
         - >-
           jfrog rt docker-push
