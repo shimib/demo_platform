@@ -13,7 +13,7 @@ pipelines:
       configuration:
        jenkinsJobName: gradle-app-acme
        integrations: 
-        - name: demo_test_JenkinsServer
+        - name: jenkinsUnified
        outputResources:   
         - name: gradle_jenkins_acme_results
     - name: Validate_Tests
