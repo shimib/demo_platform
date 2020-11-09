@@ -22,7 +22,7 @@ pipelines:
               inputResources:
               - name: gradle_jenkins_acme_results
               outputResources:
-              - name: gradlesvc_build_info        
+              - name: gosvc_build_info        
       execution:
         onSuccess:
                 - "echo passing: ${res_gradle_jenkins_acme_results_passing}"
