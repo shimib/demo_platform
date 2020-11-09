@@ -8,7 +8,7 @@ resources:
 pipelines:
   - name: ACME_gosvc_Jenkins
     steps:
-    - name: gosvc_build
+    - name: gradlesvc_build
       type: Jenkins
       configuration:
        jenkinsJobName: gradle-app-acme
