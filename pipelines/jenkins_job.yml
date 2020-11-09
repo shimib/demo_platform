@@ -5,6 +5,12 @@ resources:
     configuration:
       passing: 0
       failing: 0
+  - name: gradlesvc_build_info
+    type: BuildInfo
+    configuration:
+      sourceArtifactory: ArtifactoryUnified
+      buildName: svc_build
+      buildNumber: 1
 pipelines:
   - name: ACME_gradlesvc_Jenkins
     steps:
