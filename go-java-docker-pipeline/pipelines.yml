@@ -6,7 +6,7 @@ resources:
       gitProvider: Github_SolEng
       buildOn:
         commit: false
-  - name: gradlesvc_build_info
+  - name: gosvc_build_info
     type: BuildInfo
     configuration:
       sourceArtifactory: ArtifactoryUnified
