@@ -6,7 +6,7 @@ resources:
       passing: 0
       failing: 0
 pipelines:
-  - name: ACME_gosvc_Jenkins
+  - name: ACME_gradlesvc_Jenkins
     steps:
     - name: gradlesvc_build
       type: Jenkins
